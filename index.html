@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Another Universe</title>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    height: 100vh;
+    background: radial-gradient(circle at bottom, #0b132b, #000);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Courier New', monospace;
+    color: #fff;
+  }
+
+  /* Background bintang */
+  .stars {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: url('https://www.transparenttextures.com/patterns/stardust.png');
+    animation: moveStars 80s linear infinite;
+    opacity: 0.4;
+  }
+
+  @keyframes moveStars {
+    from { transform: translateY(0); }
+    to { transform: translateY(-600px); }
+  }
+
+  /* Gambar */
+  .image {
+    width: 180px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    z-index: 1;
+  }
+
+  /* Text */
+  .text {
+    position: relative;
+    font-size: 2rem;
+    border-right: 3px solid white;
+    padding-right: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: blink 0.8s infinite;
+    text-shadow: 
+      0 0 5px rgba(255,255,255,0.3),
+      0 0 20px rgba(173,216,230,0.4);
+    z-index: 1;
+  }
+
+  @keyframes blink {
+    50% { border-color: transparent; }
+  }
+
+</style>
+</head>
+
+<body>
+
+<div class="stars"></div>
+
+<img src="https://mysitus.vercel.app/kaguya.jpg" class="image">
+
+<div class="text" id="typing"></div>
+
+<!-- AUDIO -->
+<audio id="bg-music" loop>
+  <source src="https://files.catbox.moe/6xqz3n.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const text = "maybe in another universe";
+  const el = document.getElementById("typing");
+  let charIndex = 0;
+  let isDeleting = false;
+
+  function typeLoop() {
+    if (!isDeleting) {
+      el.textContent = text.substring(0, charIndex++);
+      if (charIndex > text.length) {
+        isDeleting = true;
+        setTimeout(typeLoop, 1500); // jeda sebelum hapus
+        return;
+      }
+    } else {
+      el.textContent = text.substring(0, charIndex--);
+      if (charIndex < 0) {
+        isDeleting = false;
+        setTimeout(typeLoop, 300); // jeda sebelum ketik lagi
+        return;
+      }
+    }
+    setTimeout(typeLoop, isDeleting ? 40 : 70);
+  }
+
+  typeLoop();
+
+  // autoplay musik fix
+  const music = document.getElementById("bg-music");
+  document.body.addEventListener("click", () => {
+    music.play();
+  }, { once: true });
+</script>
+
+</body>
+</html>
