@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>javascdih</title>
 
 <style>
@@ -12,7 +13,8 @@
   }
 
   body {
-    height: 100vh;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
     background: radial-gradient(circle at bottom, #0b132b, #000);
     overflow: hidden;
     display: flex;
@@ -21,16 +23,21 @@
     align-items: center;
     font-family: 'Courier New', monospace;
     color: #fff;
+    padding: 20px;
+    padding-top: env(safe-area-inset-top, 20px);
+    padding-bottom: env(safe-area-inset-bottom, 20px);
   }
 
   /* Background bintang */
   .stars {
-    position: absolute;
+    position: fixed;
+    top: 0; left: 0;
     width: 200%;
     height: 200%;
     background: url('https://www.transparenttextures.com/patterns/stardust.png');
     animation: moveStars 80s linear infinite;
     opacity: 0.4;
+    pointer-events: none;
   }
 
   @keyframes moveStars {
@@ -40,17 +47,20 @@
 
   /* Gambar */
   .image {
-    width: 180px;
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
     border-radius: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    margin-bottom: 24px;
+    box-shadow: 0 0 30px rgba(173,216,230,0.25), 0 0 8px rgba(255,255,255,0.1);
     z-index: 1;
+    display: block;
   }
 
-  /* Text */
+  /* Text typing */
   .text {
     position: relative;
-    font-size: 2rem;
+    font-size: clamp(1.1rem, 5vw, 2rem);
     border-right: 3px solid white;
     padding-right: 5px;
     white-space: nowrap;
@@ -60,28 +70,55 @@
       0 0 5px rgba(255,255,255,0.3),
       0 0 20px rgba(173,216,230,0.4);
     z-index: 1;
+    max-width: 90vw;
   }
 
   @keyframes blink {
     50% { border-color: transparent; }
   }
 
+  /* for R */
   .for-r {
-    margin-top: 14px;
-    font-size: 1rem;
+    margin-top: 16px;
+    font-size: clamp(0.75rem, 3vw, 1rem);
     letter-spacing: 4px;
     color: rgba(173, 216, 230, 0.7);
     z-index: 1;
     font-style: italic;
   }
 
-</style></head>
+  /* Mobile */
+  @media (max-width: 480px) {
+    .image {
+      width: 130px;
+      height: 130px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+    }
+    .for-r {
+      letter-spacing: 3px;
+    }
+  }
+
+  /* Landscape mobile */
+  @media (max-height: 500px) and (orientation: landscape) {
+    body { flex-direction: row; gap: 28px; }
+    .image { width: 90px; height: 90px; margin-bottom: 0; }
+  }
+</style>
+</head>
 
 <body>
 
 <div class="stars"></div>
 
-<img src="https://mysitus.vercel.app/kaguya.jpg" class="image">
+<img 
+  src="https://mysitus.vercel.app/kaguya.jpg" 
+  class="image" 
+  alt="kaguya"
+  crossorigin="anonymous"
+  onerror="this.src='https://i.imgur.com/Ho4R7Ph.jpeg'"
+>
 
 <div class="text" id="typing"></div>
 <div class="for-r">for R</div>
@@ -97,14 +134,14 @@
       el.textContent = text.substring(0, charIndex++);
       if (charIndex > text.length) {
         isDeleting = true;
-        setTimeout(typeLoop, 1500); // jeda sebelum hapus
+        setTimeout(typeLoop, 1500);
         return;
       }
     } else {
       el.textContent = text.substring(0, charIndex--);
       if (charIndex < 0) {
         isDeleting = false;
-        setTimeout(typeLoop, 300); // jeda sebelum ketik lagi
+        setTimeout(typeLoop, 300);
         return;
       }
     }
