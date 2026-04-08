@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#000">
 <title>javascdih</title>
 
 <style>
@@ -14,7 +12,7 @@
   }
 
   body {
-    height: 100dvh; /* fix: gunakan dvh agar tidak terpotong di HP */
+    height: 100vh;
     background: radial-gradient(circle at bottom, #0b132b, #000);
     overflow: hidden;
     display: flex;
@@ -25,79 +23,68 @@
     color: #fff;
   }
 
-  /* Background bintang — diperbaiki agar tidak blank di beberapa HP */
+  /* Background bintang */
   .stars {
-    position: fixed; /* fix: pakai fixed bukan absolute agar tidak overflow */
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    width: 200%;
+    height: 200%;
     background: url('https://www.transparenttextures.com/patterns/stardust.png');
     animation: moveStars 80s linear infinite;
     opacity: 0.4;
-    pointer-events: none; /* fix: tidak menghalangi klik */
   }
 
   @keyframes moveStars {
     from { transform: translateY(0); }
-    to   { transform: translateY(-600px); }
+    to { transform: translateY(-600px); }
   }
 
-  /* Gambar — diperbaiki ukuran responsif untuk HP kecil */
+  /* Gambar */
   .image {
-    width: clamp(120px, 40vw, 180px); /* fix: tidak terlalu besar di HP kecil */
+    width: 180px;
     border-radius: 20px;
     margin-bottom: 20px;
     box-shadow: 0 0 20px rgba(255,255,255,0.2);
     z-index: 1;
-    display: block; /* fix: cegah gap bawah gambar */
   }
 
-  /* Text wrapper — fix layout cursor & text agar sejajar */
-  .text-wrap {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    min-height: 2.4rem; /* fix: tidak loncat-loncat saat teks berubah */
-  }
-
-  /* Teks ketikan */
+  /* Text */
   .text {
-    font-size: clamp(1.1rem, 5vw, 2rem); /* fix: responsif di HP */
+    position: relative;
+    font-size: 2rem;
+    border-right: 3px solid white;
+    padding-right: 5px;
     white-space: nowrap;
-    text-shadow:
+    overflow: hidden;
+    animation: blink 0.8s infinite;
+    text-shadow: 
       0 0 5px rgba(255,255,255,0.3),
       0 0 20px rgba(173,216,230,0.4);
-  }
-
-  /* Cursor — dipisah dari teks agar animasi blink tidak mempengaruhi lebar */
-  .cursor {
-    display: inline-block;
-    width: 2px;
-    height: 1.2em;
-    background: white;
-    margin-left: 3px;
-    vertical-align: middle;
-    animation: blink 0.8s infinite;
-    box-shadow: 0 0 6px rgba(173,216,230,0.6); /* fix: tambah glow agar lebih jelas */
+    z-index: 1;
   }
 
   @keyframes blink {
-    0%, 49%  { opacity: 1; }
-    50%, 100% { opacity: 0; }
+    50% { border-color: transparent; }
   }
-</style>
-</head>
+
+  .for-r {
+    margin-top: 14px;
+    font-size: 1rem;
+    letter-spacing: 4px;
+    color: rgba(173, 216, 230, 0.7);
+    z-index: 1;
+    font-style: italic;
+  }
+
+</style></head>
 
 <body>
 
 <div class="stars"></div>
 
-<img src="https://mysitus.vercel.app/kaguya.jpg" class="image" alt="kaguya">
+<img src="https://mysitus.vercel.app/kaguya.jpg" class="image">
 
-<div class="text-wrap">
-  <span class="text" id="typing"></span>
-  <span class="cursor"></span>
-</div>
+<div class="text" id="typing"></div>
+<div class="for-r">for R</div>
 
 <script>
   const text = "maybe in another universe";
@@ -110,19 +97,18 @@
       el.textContent = text.substring(0, charIndex++);
       if (charIndex > text.length) {
         isDeleting = true;
-        setTimeout(typeLoop, 1500);
+        setTimeout(typeLoop, 1500); // jeda sebelum hapus
         return;
       }
     } else {
       el.textContent = text.substring(0, charIndex--);
       if (charIndex < 0) {
         isDeleting = false;
-        setTimeout(typeLoop, 300);
+        setTimeout(typeLoop, 300); // jeda sebelum ketik lagi
         return;
       }
     }
-    // fix: kecepatan hapus lebih cepat dari ketik, terasa lebih natural
-    setTimeout(typeLoop, isDeleting ? 35 : 70);
+    setTimeout(typeLoop, isDeleting ? 40 : 70);
   }
 
   typeLoop();
